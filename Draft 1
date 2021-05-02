@@ -1,0 +1,77 @@
+import requests
+
+#core menu function
+def menu():
+  choice = None
+
+  while choice != "0":
+    choice = input(
+      """\nWelcome to Speed Weather USA! Please examine our options.
+      
+      0 - Exit
+      1 - Get weather by city name
+      2 - Get weather by ZIP code
+
+      """
+    )
+    if choice == "0":
+      print("Goodbye!")
+
+    elif choice == "1":
+      name_weather()
+
+    elif choice == "2":
+      zip_weather()
+
+    else:
+      print("\nSorry, but that's not an option.\n")
+
+#funtion for gettig weather data via a city's name
+def name_weather():
+  city = input("What city would you like to check on?\n")
+
+  url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid=74af675a96509db2687c4ec8f4c71cbb&units=imperial"
+
+  res = requests.get(url)
+
+  data = res.json()
+
+  temp = data["list"][0]["main"]["temp"]
+
+  humidity = data["list"][0]["main"]["humidity"]
+
+  description = data["list"][0]["weather"][0]["description"]
+
+  print(f"Temp: {temp} F")
+  print(f"Humidity: {humidity}%")
+  print(f"Current weather: {description}")
+
+#function for getting weather data via ZIP code
+def zip_weather():
+  zip = input("What ZIP code would you like to check on?\n")
+
+  url = f"https://api.openweathermap.org/data/2.5/forecast?zip={zip}&appid=74af675a96509db2687c4ec8f4c71cbb&units=imperial"
+
+  res = requests.get(url)
+
+  data = res.json()
+
+  temp = data["list"][0]["main"]["temp"]
+
+  humidity = data["list"][0]["main"]["humidity"]
+
+  description = data["list"][0]["weather"][0]["description"]
+
+  print(f"Temp: {temp} F")
+  print(f"Humidity: {humidity}%")
+  print(f"Current weather: {description}")
+
+
+menu()
+input()
+
+#TO DO LIST
+#Set up connection check
+#Expand on printed weather data
+#Try to get city name function to use state codes and still work
+#Trap for errors
