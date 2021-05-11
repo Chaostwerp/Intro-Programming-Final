@@ -53,7 +53,7 @@ def output(url):
     description = data["list"][0]["weather"][0]["description"]
 
     print(f"Temp: {temp} F")
-    print(f"Feels like: {feel}")
+    print(f"Feels like: {feel} F")
     print(f"Wind speed: {wind} MPH")
     print(f"Humidity: {humidity}%")
     print(f"Current weather: {description}")
