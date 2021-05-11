@@ -26,25 +26,50 @@ def menu():
     else:
       print("\nSorry, but that's not an option.\n")
 
-#funtion for gettig weather data via a city's name
-def name_weather():
-  city = input("What city would you like to check on?\n")
+def output(url):
+    #trapping against a failure to connect to the API
+  try:
+    res = requests.get(url)
 
-  url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid=74af675a96509db2687c4ec8f4c71cbb&units=imperial"
-
-  res = requests.get(url)
+  except:
+    print("Connection to weather database was unsuccessful. Please try again.\n")
 
   data = res.json()
 
-  temp = data["list"][0]["main"]["temp"]
+  connection = data["cod"]
 
-  humidity = data["list"][0]["main"]["humidity"]
+#connection quality check, only goes forward if the connection is reportedly perfect
+  if connection == "200":
+    print("Connection to weather database successful\n")
 
-  description = data["list"][0]["weather"][0]["description"]
+    temp = data["list"][0]["main"]["temp"]
 
-  print(f"Temp: {temp} F")
-  print(f"Humidity: {humidity}%")
-  print(f"Current weather: {description}")
+    feel = data["list"][0]["main"]["feels_like"]
+
+    wind = data["list"][0]["wind"]["speed"]
+
+    humidity = data["list"][0]["main"]["humidity"]
+
+    description = data["list"][0]["weather"][0]["description"]
+
+    print(f"Temp: {temp} F")
+    print(f"Feels like: {feel}")
+    print(f"Wind speed: {wind} MPH")
+    print(f"Humidity: {humidity}%")
+    print(f"Current weather: {description}")
+
+  else:
+    print("Connection to weather database was unsuccessful. Please try again.\n")
+
+#funtion for getting weather data via a city's name
+def name_weather():
+  city = input("What city would you like to check on?\n")
+
+  state = input("What state is that in? Please use the two letter abbreviation.\n")
+
+  url = f"https://api.openweathermap.org/data/2.5/forecast?q={city},US-{state}&appid=74af675a96509db2687c4ec8f4c71cbb&units=imperial"
+
+  output(url)
 
 #function for getting weather data via ZIP code
 def zip_weather():
@@ -52,26 +77,8 @@ def zip_weather():
 
   url = f"https://api.openweathermap.org/data/2.5/forecast?zip={zip}&appid=74af675a96509db2687c4ec8f4c71cbb&units=imperial"
 
-  res = requests.get(url)
+  output(url)
 
-  data = res.json()
-
-  temp = data["list"][0]["main"]["temp"]
-
-  humidity = data["list"][0]["main"]["humidity"]
-
-  description = data["list"][0]["weather"][0]["description"]
-
-  print(f"Temp: {temp} F")
-  print(f"Humidity: {humidity}%")
-  print(f"Current weather: {description}")
-
-
+#functions finally called
 menu()
 input()
-
-#TO DO LIST
-#Set up connection check
-#Expand on printed weather data
-#Try to get city name function to use state codes and still work
-#Trap for errors
